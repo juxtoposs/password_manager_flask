@@ -1,0 +1,18 @@
+body {
+  background: #f5f7fb;
+}
+
+.card {
+  border: 0;
+  border-radius: 18px;
+}
+
+.table {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+form .btn {
+  white-space: nowrap;
+}

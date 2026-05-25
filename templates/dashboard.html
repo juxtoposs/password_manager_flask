@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+  <div>
+    <h1 class="h3 mb-1">Your Vault</h1>
+    <div class="text-muted small">Logged in as {{ username }} · {{ total }} entries stored</div>
+  </div>
+  <form class="d-flex gap-2" method="get" action="{{ url_for('dashboard') }}">
+    <input class="form-control" name="q" placeholder="Search by title" value="{{ query }}">
+    <button class="btn btn-outline-primary" type="submit">Search</button>
+    {% if query %}
+      <a class="btn btn-outline-secondary" href="{{ url_for('dashboard') }}">Clear</a>
+    {% endif %}
+  </form>
+</div>
+
+{% if entries %}
+<div class="table-responsive">
+  <table class="table table-striped align-middle">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>URL / App</th>
+        <th>Notes</th>
+        <th style="width: 280px;">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for entry in entries %}
+      <tr>
+        <td class="fw-semibold">{{ entry.title }}</td>
+        <td>{{ entry.url }}</td>
+        <td class="text-muted">{{ entry.notes }}</td>
+        <td>
+          <div class="d-flex flex-wrap gap-2">
+            <a class="btn btn-sm btn-primary" href="{{ url_for('reveal', entry_id=entry.id) }}">Reveal</a>
+            <a class="btn btn-sm btn-secondary" href="{{ url_for('edit_entry', entry_id=entry.id) }}">Edit</a>
+            <form method="post" action="{{ url_for('delete_entry', entry_id=entry.id) }}" onsubmit="return confirm('Delete this entry?');">
+              <button class="btn btn-sm btn-danger" type="submit">Delete</button>
+            </form>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+  <div class="alert alert-info">No entries found. Add your first password entry.</div>
+{% endif %}
+{% endblock %}

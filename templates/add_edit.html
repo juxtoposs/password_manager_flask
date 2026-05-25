@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <div class="card shadow-sm">
+      <div class="card-body p-4">
+        <h1 class="h4 mb-3">{{ 'Add New Entry' if mode == 'add' else 'Update Entry' }}</h1>
+        <form method="post">
+          <div class="mb-3">
+            <label class="form-label">Title</label>
+            <input class="form-control" name="title" required value="{{ entry.title if entry else '' }}">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Password {% if mode == 'edit' %}<span class="text-muted small">(leave blank to keep current)</span>{% endif %}</label>
+            <div class="input-group">
+              <input class="form-control" id="password" name="password" type="text" {% if mode == 'add' %}required{% endif %} value="">
+              <button class="btn btn-outline-secondary" type="button" onclick="generatePassword()">Generate</button>
+            </div>
+            <div class="form-text">Use the generator or type your own password.</div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">URL / Application Name</label>
+            <input class="form-control" name="url" value="{{ entry.url if entry else '' }}">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Additional Notes</label>
+            <textarea class="form-control" name="notes" rows="4">{{ entry.notes if entry else '' }}</textarea>
+          </div>
+          <div class="d-flex gap-2">
+            <button class="btn btn-success" type="submit">{{ 'Save Entry' if mode == 'add' else 'Update Entry' }}</button>
+            <a class="btn btn-outline-secondary" href="{{ url_for('dashboard') }}">Cancel</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+async function generatePassword() {
+  const response = await fetch('{{ url_for('generate_password') }}');
+  const data = await response.json();
+  document.getElementById('password').value = data.password;
+}
+</script>
+{% endblock %}
