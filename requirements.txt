@@ -1,2 +1,2 @@
-Flask>=2.3
-cryptography>=42.0
+pip install Flask>=2.3
+pip install cryptography>=42.0
